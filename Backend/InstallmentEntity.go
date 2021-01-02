@@ -1,18 +1,33 @@
 package schema
 
-import "github.com/facebook/ent"
+import (
+	"github.com/facebookincubator/ent"
+	"github.com/facebookincubator/ent/schema/edge"
+	"github.com/facebookincubator/ent/schema/field"
+)
 
-// User holds the schema definition for the User entity.
-type User struct {
+// Professor holds the schema definition for the Professor entity.
+type Professor struct {
 	ent.Schema
 }
 
-// Fields of the User.
-func (User) Fields() []ent.Field {
-	return nil
+// Fields of the Professor.
+func (Professor) Fields() []ent.Field {
+	return []ent.Field{
+		field.String("name"),
+		field.String("tel"),
+		field.String("email"),
+	}
 }
 
-// Edges of the User.
-func (User) Edges() []ent.Edge {
-	return nil
+// Edges of the Professor.
+func (Professor) Edges() []ent.Edge {
+	return []ent.Edge{
+		edge.From("prof_pre", Prefix.Type).
+			Ref("pre_prof").Unique(),
+		edge.From("prof_fac", Faculty.Type).
+			Ref("fac_course").Unique(),
+		edge.From("prof_pros", Professorship.Type).
+			Ref("pros_prof").Unique(),
+	}
 }
